@@ -155,7 +155,7 @@ nav.pillars a:last-child { border-right: 0; }
 .pillar-hero { background: var(--block); color: var(--cream); padding: 70px 0 64px; position: relative; overflow: hidden; }
 .pillar-hero h1 { font-family: var(--display); font-weight: 900; font-size: clamp(56px, 11vw, 150px); line-height: .86; letter-spacing: -.05em; }
 .pillar-hero p { font-size: 24px; font-style: italic; max-width: 620px; margin-top: 22px; color: rgba(243,237,226,.9); }
-.pillar-hero .count { position: absolute; right: 32px; bottom: 26px; }
+.pillar-hero .count { display: block; margin-top: 34px; }
 .list { padding: 20px 0 60px; }
 .row { display: grid; grid-template-columns: 120px 1fr 260px; gap: 28px; padding: 28px 0; border-bottom: 1px solid var(--rule); align-items: center; transition: background-color 150ms ease, transform 160ms var(--ease-out); }
 .row h3 { font-family: var(--display); font-weight: 700; font-size: 32px; line-height: 1.08; letter-spacing: -.02em; margin-bottom: 6px; }
@@ -214,5 +214,4 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--ink); outline-o
   .row .date { order: -1; }
   .prose { font-size: 19px; }
   .empty { flex-direction: column; align-items: flex-start; }
-  .pillar-hero .count { position: static; display: block; margin-top: 24px; }
 }

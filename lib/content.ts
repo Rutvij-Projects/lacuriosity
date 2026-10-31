@@ -49,7 +49,34 @@ export function formatDate(iso: string): string {
   return dateFormat.format(new Date(iso));
 }
 
-// Bodies come from our own pipeline, so the HTML is trusted.
+// Article files are Markdown with simple `key: value` front matter between --- lines.
+// `pillar` is the pillar's slug; it is resolved to the pillar id from Supabase.
+export function parseArticleFile(slug: string, source: string, pillars: Pillar[]): Article {
+  const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
+  if (!match) throw new Error(`Article "${slug}": missing front matter`);
+
+  const meta: Record<string, string> = {};
+  for (const line of match[1].split(/\r?\n/)) {
+    const i = line.indexOf(':');
+    if (i > 0) meta[line.slice(0, i).trim()] = line.slice(i + 1).trim();
+  }
+
+  const pillar = pillars.find(p => p.slug === meta.pillar);
+  if (!pillar) throw new Error(`Article "${slug}": unknown pillar "${meta.pillar}"`);
+
+  return {
+    id: slug,
+    slug,
+    title: meta.title,
+    excerpt: meta.excerpt ?? '',
+    body: match[2].trim(),
+    coverUrl: meta.cover || null,
+    pillarId: pillar.id,
+    publishedAt: meta.publishedAt,
+  };
+}
+
+// Bodies are our own files, so the HTML is trusted.
 export function renderMarkdown(markdown: string): string {
   return marked.parse(markdown, { async: false, gfm: true });
 }

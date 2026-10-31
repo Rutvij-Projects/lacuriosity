@@ -10,10 +10,11 @@ export default async function Home() {
   const latest = articles[0];
   const latestPillar = latest && pillars.find(p => p.id === latest.pillarId);
 
-  // Pillars with articles first (most recent first), then the ones still waiting for their first issue.
-  const groups = groupByPillar(articles, pillars);
+  // The hero isn't repeated below. Pillars with articles come first (most recent first), then the
+  // ones still waiting for their first issue; a pillar whose only article is the hero gets no band.
+  const groups = groupByPillar(articles.slice(1), pillars);
   const filled = groups.filter(g => g.articles.length).sort((a, b) => b.articles[0].publishedAt.localeCompare(a.articles[0].publishedAt));
-  const waiting = groups.filter(g => !g.articles.length);
+  const waiting = groups.filter(g => !g.articles.length && g.pillar.id !== latest?.pillarId);
 
   return (
     <main>

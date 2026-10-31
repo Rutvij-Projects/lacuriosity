@@ -20,6 +20,8 @@ Replace the dead Ghost site with a new static site that reads articles from Supa
 
 ## Data
 
+> **Revised 2026-10-31:** the SQL migration failed to apply, so articles moved to static Markdown files in `content/articles/` (front matter: `title, pillar, excerpt, cover, publishedAt`). Pillars are still read from Supabase. The migration below is kept as the roadmap for moving articles into the DB later.
+
 ### Existing tables (read)
 
 - `pillars`: `id, name, display_name, slug, accent_color, description, is_active, created_at` — 5 rows, publicly readable.

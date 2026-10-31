@@ -35,8 +35,8 @@ export default async function PillarPage({ params }: Props) {
           <span className="mono">Stream {String(index).padStart(2, '0')} of {String(pillars.length).padStart(2, '0')}</span>
           <h1>{rest.length ? <>{first}<br />{rest.join(' ')}</> : first}</h1>
           <p>{pillar.description}</p>
+          <span className="count mono">{articles.length} {articles.length === 1 ? 'article' : 'articles'}</span>
         </div>
-        <span className="count mono">{articles.length} {articles.length === 1 ? 'article' : 'articles'}</span>
       </section>
       <div className="wrap list">
         {articles.length === 0 && (

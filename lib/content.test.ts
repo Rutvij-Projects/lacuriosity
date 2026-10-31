@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readingTime, groupByPillar, formatDate, renderMarkdown, type Article, type Pillar } from './content';
+import { readingTime, groupByPillar, formatDate, renderMarkdown, parseArticleFile, type Article, type Pillar } from './content';
 
 const pillars: Pillar[] = [
   { id: 'p1', slug: 'human-mind', name: 'Human Mind', color: '#7c3aed', description: '' },
@@ -34,6 +34,38 @@ describe('groupByPillar', () => {
 describe('formatDate', () => {
   it('formats as "31 Oct 2026" in UTC', () => {
     expect(formatDate('2026-10-31T23:30:00Z')).toBe('31 Oct 2026');
+  });
+});
+
+describe('parseArticleFile', () => {
+  const file = [
+    '---',
+    'title: Why Your Brain Is Built to Forget',
+    'pillar: human-mind',
+    "excerpt: Forgetting isn't a failure: it's a feature.",
+    'cover:',
+    'publishedAt: 2026-10-31T08:00:00Z',
+    '---',
+    '',
+    'First paragraph.',
+  ].join('\n');
+
+  it('reads front matter and body, resolving the pillar slug to its id', () => {
+    const article = parseArticleFile('why-forget', file, pillars);
+    expect(article).toEqual({
+      id: 'why-forget',
+      slug: 'why-forget',
+      title: 'Why Your Brain Is Built to Forget',
+      excerpt: "Forgetting isn't a failure: it's a feature.",
+      body: 'First paragraph.',
+      coverUrl: null,
+      pillarId: 'p1',
+      publishedAt: '2026-10-31T08:00:00Z',
+    });
+  });
+
+  it('throws when the pillar slug is unknown', () => {
+    expect(() => parseArticleFile('x', file.replace('human-mind', 'nope'), pillars)).toThrow(/unknown pillar "nope"/);
   });
 });
 
