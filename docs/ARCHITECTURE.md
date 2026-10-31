@@ -8,6 +8,8 @@ This document explains how the LaCuriosity website was designed and built: the c
 
 LaCuriosity is an automated editorial publication. Behind it sits a content engine built on Make.com: a daily trigger fans out across **five editorial streams**, each driven by its own Claude persona with a research mandate and a voice. The engine researches demand signals (Tavily, Reddit), drafts and fact-checks with multiple agents, generates Risograph-style illustrations with Gemini, records narration with ElevenLabs, assembles video with Creatomate, and until now distributed through Ghost CMS, email and social. One trigger, 55 nodes, no human in the loop.
 
+![LaCuriosity AI automation orchestration framework in Make](images/make-pipeline.jpg)
+
 The reading surface had stopped working. **lacuriosity.com was failing with an SSL error**, and the Ghost site behind it was no longer serving readers. The brief for this project was narrow on purpose:
 
 1. Build a new front end from scratch, with a new visual identity.
@@ -175,7 +177,7 @@ There is no end-to-end suite. For a static site with five templates, that trade-
 | What breaks | What happens |
 |---|---|
 | An article names an unknown stream, or has no front matter | The build fails with the article's slug in the message; the live site keeps serving the last good version |
-| An article has no cover | The halftone cover renders in the stream's colour |
+| An article has no cover | The halftone cover renders in the stream's colour (all three launch articles have illustrations) |
 | A stream has no articles | Its band and page show "First issue soon." |
 | No articles at all | The front page shows "The first issue is on the press." |
 | A test fails | The deploy stops before building |

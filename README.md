@@ -27,7 +27,7 @@ The site is a Next.js static export hosted on GitHub Pages. There is no server, 
   </tr>
   <tr>
     <td align="center"><img src="docs/screenshots/article-light.jpg" width="420" alt="Article page with headline, cover and body"><br><sub><b>Article</b></sub></td>
-    <td align="center"><img src="docs/screenshots/article-dark.jpg" width="420" alt="Article without an illustration, showing the halftone cover"><br><sub><b>Halftone fallback cover · dark</b></sub></td>
+    <td align="center"><img src="docs/screenshots/article-dark.jpg" width="420" alt="The Planet article in dark mode with its Risograph forest cover"><br><sub><b>Article · dark</b></sub></td>
   </tr>
   <tr>
     <td align="center"><img src="docs/screenshots/pillar.jpg" width="420" alt="The Construct pillar page"><br><sub><b>Stream page</b></sub></td>
@@ -38,6 +38,26 @@ The site is a Next.js static export hosted on GitHub Pages. There is no server, 
     <td align="center"><img src="docs/screenshots/mobile-article.jpg" width="200" alt="Article on a phone in dark mode"><br><sub><b>Phone · article, dark</b></sub></td>
   </tr>
 </table>
+
+## The content engine
+
+The articles come from LaCuriosity's content engine, an AI orchestration workflow built on [Make](https://www.make.com). A single daily trigger picks a topic, gathers demand signals (search and news angles, Reddit, demand search), and has Claude extract the insights. A router then fans out into five parallel streams, one per pillar. Each stream runs the same chain: a writer persona drafts the piece, a fact checker verifies it, a reference finder and Tavily searches build citations, an art director briefs Gemini for the Risograph illustration, and the result is stored in Supabase and published.
+
+<p align="center">
+  <img src="docs/images/make-pipeline.jpg" alt="LaCuriosity AI automation orchestration framework in Make: topic selection, research signals, Claude insight extraction, a router, and five parallel writer → fact-checker → research → art-director → publish chains" width="100%">
+</p>
+
+| Stage | What happens | Tools |
+|---|---|---|
+| Select | Choose the day's topic and the angle readers are searching for | Make, Tavily, Reddit |
+| Understand | Extract insights from the research signals | Claude |
+| Route | Distribute the work to the five pillar streams | Make router |
+| Write and verify | A pillar-specific writer drafts; a fact checker verifies accuracy | Claude |
+| Reference | Find sources and build citations | Tavily, Claude |
+| Illustrate | An art director designs the visual; Gemini generates the Risograph cover | Claude, Gemini |
+| Store and publish | Upload assets, create the post and record it | Supabase, publishing platform |
+
+This website is the reading surface for that engine. Today articles arrive as Markdown files in this repo; connecting the engine to publish here directly is the first item on the [roadmap](docs/ARCHITECTURE.md#roadmap).
 
 ## Architecture in brief
 
@@ -174,7 +194,7 @@ One-time setup (repo admin):
 
 ## Project status
 
-V1 is complete: every page, both themes, the design system and the deploy pipeline. It launches with three articles (Human Mind, The Construct, The Planet); Physical World and The Abstract show their "first issue soon" state until their first pieces land.
+V1 is complete: every page, both themes, the design system and the deploy pipeline. It launches with three illustrated articles (Human Mind, The Construct, The Planet); Physical World and The Abstract show their "first issue soon" state until their first pieces land.
 
 Next: connect the LaCuriosity content pipeline so articles arrive automatically rather than by commit, add an RSS feed and Open Graph cover images per article, and bring in the audio narration that the pipeline already produces. See the roadmap in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#roadmap).
 
