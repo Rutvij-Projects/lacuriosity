@@ -9,7 +9,6 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.118.0",
     "marked": "^18.1.2",
     "next": "^16.2.4",
     "react": "^19.3.1",

@@ -20,7 +20,7 @@ Replace the dead Ghost site with a new static site that reads articles from Supa
 
 ## Data
 
-> **Revised 2026-10-31:** the SQL migration failed to apply, so articles moved to static Markdown files in `content/articles/` (front matter: `title, pillar, excerpt, cover, publishedAt`). Pillars are still read from Supabase. The migration below is kept as the roadmap for moving articles into the DB later.
+> **Revised 2026-10-31:** Supabase is out of scope for v1. Articles are Markdown files in `content/articles/` (front matter: `title, pillar, excerpt, cover, publishedAt`), pillars are in `content/pillars.ts`, covers in `public/covers/`. No env vars or secrets. The schema and migration below are kept as the roadmap for moving content into Supabase later; the rest of this spec (pages, design, deploy) is unchanged apart from the build needing no secrets.
 
 ### Existing tables (read)
 

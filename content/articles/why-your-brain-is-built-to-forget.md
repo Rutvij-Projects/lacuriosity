@@ -2,7 +2,7 @@
 title: Why Your Brain Is Built to Forget
 pillar: human-mind
 excerpt: Forgetting isn't a failure of memory. It's the feature that lets you think at all.
-cover: https://mskwqqbigtauakojpyhn.supabase.co/storage/v1/object/public/covers/2026-04-17T07:02:16.297Z.png
+cover: /covers/why-your-brain-is-built-to-forget.jpg
 publishedAt: 2026-10-31T08:00:00Z
 ---
 

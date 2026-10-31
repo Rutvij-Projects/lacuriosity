@@ -2,7 +2,7 @@
 title: Every Program Is Slowly Falling Apart
 pillar: the-construct
 excerpt: Software doesn't wear out — the world around it does. A short history of bit rot.
-cover: https://mskwqqbigtauakojpyhn.supabase.co/storage/v1/object/public/covers/Gemini_Generated_Image_hwg7nmhwg7nmhwg7.png
+cover: /covers/every-program-is-slowly-falling-apart.jpg
 publishedAt: 2026-10-30T08:00:00Z
 ---
 

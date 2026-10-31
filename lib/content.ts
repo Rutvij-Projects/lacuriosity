@@ -50,7 +50,7 @@ export function formatDate(iso: string): string {
 }
 
 // Article files are Markdown with simple `key: value` front matter between --- lines.
-// `pillar` is the pillar's slug; it is resolved to the pillar id from Supabase.
+// `pillar` is the pillar's slug from content/pillars.ts.
 export function parseArticleFile(slug: string, source: string, pillars: Pillar[]): Article {
   const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
   if (!match) throw new Error(`Article "${slug}": missing front matter`);
