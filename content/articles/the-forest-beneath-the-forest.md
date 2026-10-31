@@ -2,7 +2,7 @@
 title: The Forest Beneath the Forest
 pillar: the-planet
 excerpt: Under every old-growth stand runs a fungal network trading sugar, water and nutrients between trees.
-cover: 
+cover: /covers/the-forest-beneath-the-forest.jpg
 publishedAt: 2026-10-29T08:00:00Z
 ---
 
