@@ -1,52 +1,129 @@
 # LaCuriosity
 
-**Learn something new, every day.** LaCuriosity publishes long-form articles across five streams of curiosity:
+**Learn something new, every day.**
 
-| Stream | What it covers |
-| --- | --- |
-| Physical World | Physics, chemistry, biology, earth sciences |
-| Human Mind | Psychology, neuroscience, cognition |
-| The Construct | Society, culture, history, the systems we've built |
-| The Abstract | Mathematics, philosophy, logic, pure ideas |
-| The Planet | Environment, ecology, climate |
+LaCuriosity is a daily editorial publication: one long-form article a day across five streams of human knowledge, each written in its own voice and illustrated in a Risograph print style. This repository is the reading surface, a fast static website at **[lacuriosity.com](https://lacuriosity.com)** that looks and feels like a printed magazine.
 
-Live at **[lacuriosity.com](https://lacuriosity.com)**.
+The site is a Next.js static export hosted on GitHub Pages. There is no server, no database and no secret to manage: articles are Markdown files, and every page is plain HTML built ahead of time.
 
 ---
 
-## How it works
+## What it does
+
+- **Five streams of curiosity.** Physical World, Human Mind, The Construct, The Abstract and The Planet. Each has its own colour, page and voice.
+- **A front page that reads like an edition.** Today's article leads as a full hero; below it, each stream gets a colour-blocked band with its latest pieces. Streams with nothing published yet say so ("First issue soon") without leaving a gap.
+- **Long-form reading that respects the reader.** A 680px measure, a drop cap and pull quotes in the stream's colour, reading time, and "More curiosities" at the end.
+- **Light and dark mode.** Follows the reader's OS by default; a ☾/☀ toggle overrides it and is remembered. The theme is applied before first paint, so there is never a white flash.
+- **Risograph identity.** Paper grain, misregistered ink offsets on the masthead, halftone-dot covers when an article has no illustration, and solid "ink" blocks per stream.
+- **Motion with restraint.** Press feedback, quiet hovers on pointer devices only, a one-time staggered entrance, and full `prefers-reduced-motion` support.
+- **Publishing is a commit.** Drop a Markdown file into `content/articles/`, push, and the site rebuilds and redeploys in about a minute.
+
+## Screenshots
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/home-light.jpg" width="420" alt="Front page in light mode with today's article and the Construct band"><br><sub><b>Front page · light</b></sub></td>
+    <td align="center"><img src="docs/screenshots/home-dark.jpg" width="420" alt="Front page in dark mode"><br><sub><b>Front page · dark</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/article-light.jpg" width="420" alt="Article page with headline, cover and body"><br><sub><b>Article</b></sub></td>
+    <td align="center"><img src="docs/screenshots/article-dark.jpg" width="420" alt="Article without an illustration, showing the halftone cover"><br><sub><b>Halftone fallback cover · dark</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/pillar.jpg" width="420" alt="The Construct pillar page"><br><sub><b>Stream page</b></sub></td>
+    <td align="center"><img src="docs/screenshots/about-dark.jpg" width="420" alt="About page with the five streams"><br><sub><b>About · the five streams</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/mobile-home.jpg" width="200" alt="Front page on a phone"><br><sub><b>Phone · front page</b></sub></td>
+    <td align="center"><img src="docs/screenshots/mobile-article.jpg" width="200" alt="Article on a phone in dark mode"><br><sub><b>Phone · article, dark</b></sub></td>
+  </tr>
+</table>
+
+## Architecture in brief
+
+Two boxes: **this repository** (content + code) and **GitHub** (Actions builds it, Pages serves it). Readers download static HTML, CSS, fonts and images; nothing runs on a server.
 
 ```
 content/articles/*.md ─┐
 content/pillars.ts ────┼─► next build (static export) ─► out/ ─► GitHub Pages ─► lacuriosity.com
-public/covers/*.jpg ───┘        ▲
-                                └─ GitHub Actions: on push to main, daily 14:00 UTC, or manual run
+public/covers/*.jpg ───┘          ▲
+                                  └── GitHub Actions: push to main · daily 14:00 UTC · manual run
 ```
 
-- **Articles** are Markdown files in [`content/articles/`](content/articles). One file per article; the filename is the URL slug.
-- **Pillars** (names, slugs, colours, descriptions) live in [`content/pillars.ts`](content/pillars.ts).
-- **Cover images** live in [`public/covers/`](public/covers).
-- Everything is in this repo: no database, no API keys, no secrets. The whole site is **static HTML**, so it's fast and costs nothing to host.
+| Decision | Why |
+|---|---|
+| Static export, not a server-rendered app | A publication is read far more than it is written. Pre-built HTML is fastest for readers, indexable by search engines, and free to host. |
+| Articles as Markdown in the repo | Publishing is a commit with a diff and a history. No database to provision, secure or pay for, and nothing to go wrong at request time. |
+| One base colour per stream, tones derived in CSS | `color-mix` turns each stream's single hex value into a readable accent and a deep ink block, separately tuned for light and dark. Change one value and the whole site follows. |
+| Theme set by an inline script before first paint | Without it, a dark-mode reader sees a white flash on every page load. |
+| Covers optional, with a generated halftone fallback | The site never shows a broken image or an empty box when the illustration step hasn't run. |
+| A single data module (`lib/data.ts`) | Pages never read files directly. Moving content into a database later changes one file, not every page. |
+| No secrets at all | The build needs no API keys, so there is nothing to leak or rotate, and anyone can clone and run it. |
 
-## Stack
+The full write-up covers how the site was built, every layer, the design system, what each choice costs, how it fails, and where it's headed:
 
-Next.js 16 (App Router, `output: 'export'`) · React 19 · TypeScript · Tailwind CSS v4 · `marked` · Vitest · GitHub Pages
+**[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**
 
-## Run it locally
+## Tech stack
+
+- **Framework:** Next.js 16 (App Router, `output: 'export'`), React 19, TypeScript (strict)
+- **Styling:** Tailwind CSS v4 (reset and build pipeline) with a hand-written design system in `app/globals.css`
+- **Type:** Fraunces (display), Newsreader (body), IBM Plex Mono (labels) via `next/font`, self-hosted at build time
+- **Content:** Markdown with front matter, rendered by `marked`
+- **Tests:** Vitest
+- **Hosting:** GitHub Pages, deployed by GitHub Actions
+
+## Repository layout
+
+```
+app/
+  page.tsx                  Front page: today's article + one band per stream
+  articles/[slug]/page.tsx  Article page
+  pillar/[slug]/page.tsx    Stream page
+  about/page.tsx            About
+  not-found.tsx             404
+  layout.tsx                Fonts, metadata, pre-paint theme script, masthead, footer
+  globals.css               Design system: tokens, light/dark, riso effects, motion
+components/                 Masthead, ThemeToggle, ArticleCard, Cover, Footer
+content/
+  articles/                 One Markdown file per article (filename = URL slug)
+  pillars.ts                The five streams: name, slug, colour, description
+lib/
+  content.ts                Pure helpers: front matter, reading time, grouping, dates, Markdown
+  data.ts                   The only module that knows where content lives
+public/covers/              Article illustrations
+docs/                       Architecture write-up, design spec, plan, UI mockup, screenshots
+.github/workflows/          Build, test and deploy to GitHub Pages
+```
+
+Pages never read the filesystem. They go through `lib/data.ts`, which uses the pure helpers in `lib/content.ts`.
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 20 or newer and npm
+
+### Run
 
 ```bash
 npm install
-npm run dev     # http://localhost:3000
+npm run dev        # http://localhost:3000
 ```
 
-| Script | What it does |
-| --- | --- |
-| `npm run dev` | Dev server with hot reload |
-| `npm test` | Unit tests for the content helpers |
-| `npm run build` | Static export to `out/` |
-| `npm start` | Serve `out/` locally |
+No `.env` file is needed.
 
-## Adding an article
+### Commands
+
+| Command | Purpose |
+|---|---|
+| `npm run dev` | Dev server with hot reload |
+| `npm test` | Run the Vitest suite |
+| `npx tsc --noEmit` | Type-check |
+| `npm run build` | Static export to `out/` |
+| `npm start` | Serve `out/` locally, exactly as GitHub Pages will |
+
+## Publishing an article
 
 Create `content/articles/<slug>.md`:
 
@@ -59,63 +136,57 @@ cover: /covers/the-forest-beneath-the-forest.jpg
 publishedAt: 2026-10-29T08:00:00Z
 ---
 
-Article body in Markdown. `## Headings`, **bold**, > quotes and lists are all styled.
+The article body in Markdown. ## Headings, **bold**, > pull quotes and lists are all styled.
 ```
 
-- `pillar` must be one of: `physical-world`, `human-mind`, `the-construct`, `the-abstract`, `the-planet` (the build fails with a clear error otherwise).
-- `cover` is optional: put the image in `public/covers/` (JPEG, about 1600px wide) and reference it as `/covers/<file>`. Leave it empty and the site draws a halftone cover in the pillar's colour.
-- The newest `publishedAt` becomes the home page hero.
+| Field | Notes |
+|---|---|
+| `title` | The headline |
+| `pillar` | One of `physical-world`, `human-mind`, `the-construct`, `the-abstract`, `the-planet`. An unknown value fails the build with a clear message. |
+| `excerpt` | The standfirst under the headline and the line on cards |
+| `cover` | Optional. Put a JPEG (about 1600px wide) in `public/covers/` and reference it as `/covers/<file>`. Leave it empty for the halftone cover. |
+| `publishedAt` | ISO date. The newest article becomes the front-page hero. |
 
-Commit to `main` and the site redeploys in about a minute.
+Push to `main`. The workflow tests, builds and deploys; the article is live in about a minute.
 
-## Project layout
+## Testing
 
-```
-app/
-  page.tsx                 Home: latest article + one band per pillar
-  articles/[slug]/page.tsx Article page
-  pillar/[slug]/page.tsx   Pillar page
-  about/page.tsx           About
-  not-found.tsx            404
-  globals.css              Riso design system: tokens, light/dark, motion
-components/                Masthead, ThemeToggle, ArticleCard, Cover, Footer
-content/
-  articles/                The articles (Markdown)
-  pillars.ts               The five pillars: name, slug, colour, description
-lib/
-  content.ts               Pure helpers: front matter, reading time, grouping, dates, Markdown
-  data.ts                  Loads pillars and articles for the pages
-public/covers/             Cover images
-docs/                      Design spec, implementation plan, approved UI mockup
-```
-
-## Design
-
-Risograph editorial: warm paper, Fraunces headlines, Newsreader body, IBM Plex Mono labels, solid colour blocks per pillar.
-
-- **Light and dark mode.** Follows the reader's OS setting; the ☾/☀ toggle overrides it and is remembered. The theme is applied before first paint, so there is no flash.
-- **One colour per pillar drives everything.** Each pillar's `color` in `content/pillars.ts` is the base; CSS `color-mix` derives a readable accent and a deep "ink" block for each theme. Change one hex value and the whole site follows.
-- **Motion** follows Emil Kowalski's design-engineering principles: a custom ease-out curve, press feedback, hover effects only on hover-capable devices, a short one-time entrance, and `prefers-reduced-motion` support.
+Unit tests cover the pure content layer: front-matter parsing (including the unknown-stream error), reading time, grouping articles by stream (including empty streams), date formatting, and Markdown rendering. The build itself is the integration test: every route is generated at build time, so a malformed article fails the deploy instead of shipping a broken page. Visual QA (light/dark, desktop/phone, keyboard focus, reduced motion) was done by hand in the browser; there is no end-to-end suite.
 
 ## Deployment
 
-`.github/workflows/deploy.yml` tests, builds and deploys `out/` to GitHub Pages.
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) runs `npm ci`, `npm test` and `npm run build`, then publishes `out/` to GitHub Pages. It runs on every push to `main`, daily at 14:00 UTC (to keep the masthead date current), and on demand from the Actions tab.
 
 One-time setup (repo admin):
 
 1. **Settings → Pages → Source: GitHub Actions.**
-2. **Custom domain:** `public/CNAME` already contains `lacuriosity.com`. At the domain registrar add:
+2. **Custom domain.** `public/CNAME` already contains `lacuriosity.com`. At the domain registrar add:
 
    | Type | Host | Value |
-   | --- | --- | --- |
+   |---|---|---|
    | A | @ | 185.199.108.153 |
    | A | @ | 185.199.109.153 |
    | A | @ | 185.199.110.153 |
    | A | @ | 185.199.111.153 |
    | CNAME | www | rutvij-projects.github.io |
 
-3. Once the certificate is issued, tick **Enforce HTTPS** under Settings → Pages.
+3. Once GitHub has issued the certificate, tick **Enforce HTTPS** under Settings → Pages.
 
-## Roadmap
+## Project status
 
-- Read articles and pillars from Supabase so the Make.com pipeline can publish directly. Only `lib/data.ts` needs to change; the pages don't.
+V1 is complete: every page, both themes, the design system and the deploy pipeline. It launches with three articles (Human Mind, The Construct, The Planet); Physical World and The Abstract show their "first issue soon" state until their first pieces land.
+
+Next: connect the LaCuriosity content pipeline so articles arrive automatically rather than by commit, add an RSS feed and Open Graph cover images per article, and bring in the audio narration that the pipeline already produces. See the roadmap in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#roadmap).
+
+## Documentation
+
+| Document | What it is |
+|---|---|
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | How the site was built: context, decisions, every layer, design system, failure modes, roadmap |
+| [docs/superpowers/specs](docs/superpowers/specs) | Design spec |
+| [docs/superpowers/plans](docs/superpowers/plans) | Implementation plan |
+| [docs/mockup/index.html](docs/mockup/index.html) | The approved interactive UI mockup (open locally in a browser) |
+
+## Author
+
+Built by [Rutvij Dhotey](https://github.com/rutvijdhotey).

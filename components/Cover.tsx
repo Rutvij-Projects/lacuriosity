@@ -9,7 +9,7 @@ export function Cover({ src, pillar, priority = false }: { src: string | null; p
       {src ? (
         // Static export: no image optimiser, so a plain img is correct here.
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt="" loading={priority ? 'eager' : 'lazy'} decoding="async" />
+        <img src={src} alt="" {...(priority ? { fetchPriority: 'high' as const } : { loading: 'lazy' as const, decoding: 'async' as const })} />
       ) : (
         <div className="fallback" aria-hidden>
           <span className="big">{mark(pillar?.name ?? 'LaCuriosity')}</span>

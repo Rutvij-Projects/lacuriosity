@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { Pillar } from '@/lib/content';
-import { formatLongDate } from '@/lib/content';
+import { formatDate, formatLongDate } from '@/lib/content';
 import { ThemeToggle } from './ThemeToggle';
 import { pillarStyle } from './pillarStyle';
 
@@ -10,7 +10,7 @@ export function Masthead({ pillars, buildDate }: { pillars: Pillar[]; buildDate:
       <div className="wrap">
         <div className="topbar mono">
           <span className="edition">Daily edition</span>
-          <span>{formatLongDate(buildDate)}</span>
+          <span><span className="date-long">{formatLongDate(buildDate)}</span><span className="date-short">{formatDate(buildDate)}</span></span>
           <span className="topbar-right">
             <Link href="/about/">About</Link>
             <ThemeToggle />
